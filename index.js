@@ -3,7 +3,7 @@ const express=require('express')
 const jwt=require('jsonwebtoken')
 const cors=require('cors')
 const bcrypt=require('bcrypt')
-const {organizationmodel,usermodel,boardsmodel,issuesmodel}=require('./models')
+const {organizationmodel,usermodel,boardsmodel,issuemodel}=require('./models')
 
 const app=express()
 app.use(express.json())
@@ -118,7 +118,10 @@ app.post("/organization",middleware,async (req,res)=>{
     })
 })
 
-
+//owner allowed to add members to his organization
+//get userid from middleware and check if the user is admin of the organization
+//get organizationid which of his organization he wants to add member to
+//get memberusername he wants to add to his organization
 app.post("/add-member-to-organization",middleware,async (req,res)=>{
     const userId=req.userId
     const organizationId=req.body.organizationId
@@ -164,6 +167,8 @@ app.post("/add-member-to-organization",middleware,async (req,res)=>{
 
 
 //CREATE BOARD
+//anyone who is registered and has organization
+//find does (stops at the first match).some() returns a plain boolean
 app.post("/board",middleware,async (req,res)=>{
     const title=req.body.title
     const organizationId=req.body.organizationId
@@ -199,7 +204,6 @@ app.post("/board",middleware,async (req,res)=>{
     })
 })
 
-
 //CREATE ISSUE
 app.post("/issue",middleware,async (req,res)=>{
     const title=req.body.title
@@ -231,7 +235,7 @@ app.post("/issue",middleware,async (req,res)=>{
         })
     }
 
-    const issue=await issuesmodel.create({
+    const issue=await issuemodel.create({
         title:title,
         description:description,
         status:"TODO",
@@ -263,7 +267,7 @@ app.get("/organization",middleware,async (req,res)=>{
     const ismember=organization.members.some(
         member=>member.toString()===userId.toString()
     )
-
+ 
     const isadmin=organization.admin.toString()===userId.toString()
 
     if(!ismember&&!isadmin){
@@ -436,7 +440,7 @@ app.get("/issues",middleware,async (req,res)=>{
         })
     }
 
-    const issues=await issuesmodel.find({
+    const issues=await issuemodel.find({
         boardId:boardId
     })
 
@@ -445,12 +449,11 @@ app.get("/issues",middleware,async (req,res)=>{
     })
 })
 
-
 //UPDATE ISSUE
 app.put("/issues",middleware,async (req,res)=>{
     const issueId=req.body.issueId
 
-    const issue=await issuesmodel.findById(issueId)
+    const issue=await issuemodel.findById(issueId)
 
     if(!issue){
         return res.status(404).json({
