@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(cors({ 
   origin: [
     'http://localhost:3001', 
-    'https://onrender.com'
+    'https://trello-1-n1kc.onrender.com/'
   ], 
   credentials: true 
 }))
