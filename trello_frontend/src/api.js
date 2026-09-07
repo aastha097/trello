@@ -1,6 +1,6 @@
 const API_BASE = window.location.hostname === 'localhost' 
   ? 'http://localhost:3000' 
-  : 'https://trello-iu2d.onrender.com';
+  : 'https://trello-api-dupp.onrender.com';
 
 export function getToken() {
   return localStorage.getItem('dispatch_token')
