@@ -20,7 +20,7 @@ export default function AuthScreen({ onSignedIn }) {
         onSignedIn(data.token, username)
       } else {
         await api.signup(username, password)
-        setInfo('Registered. Switch to sign in.')
+        setInfo('Registered. Sign in to continue')
         setMode('signin')
       }
     } catch (err) {
