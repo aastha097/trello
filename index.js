@@ -7,8 +7,9 @@ const {organizationmodel,usermodel,boardsmodel,issuemodel}=require('./models')
 
 const app=express()
 app.use(express.json())
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3001' }))
 
+const PORT = process.env.PORT || 3000
 
 app.post("/signup",async (req,res)=>{
     const username=req.body.username
@@ -504,4 +505,4 @@ app.put("/issues",middleware,async (req,res)=>{
 })
 
 
-app.listen(3000)
+app.listen(PORT, () => console.log('API running on port', PORT))
